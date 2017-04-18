@@ -1,0 +1,10 @@
+{
+    "db": {
+        "host"			            : "localhost",
+        "port"			            : 5432,
+        "dbname"		            : "spider",
+        "username"		            : "postgres",
+        "password"		            : "qweasdzxc"
+    },
+    "torrent_base_url": "http://ru-tor.net"
+}

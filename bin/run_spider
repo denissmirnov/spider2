@@ -1,0 +1,2 @@
+cd ..
+scrapy crawl torrents

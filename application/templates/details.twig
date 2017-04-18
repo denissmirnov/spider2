@@ -1,0 +1,27 @@
+{% extends "base.twig" %}
+
+{% block main %}
+    <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+        <h2>{{ torrent['details']['name'] }}</h2>
+        <h4>
+            {% for row in torrent['details']['genre'] %}
+                <a href="#" class="genre_filter" genre="{{ row }}">{{ row }}</a> |
+            {% end %}
+        </h4>
+        <div class="table-responsive">
+            <table>
+                <tr>
+                    <td><img src="{{ torrent['details']['image'] }}" height="480"></td>
+                    <td valign="top" style="padding-left: 10px">{{ torrent['details']['synopsys'] }}</td>
+                </tr>
+            </table>
+        </div><br><br>
+        <a class="btn btn-primary" href="{{ torrent['torrent_url'] }}" role="button">Скачать</a> {{ torrent['text'] }}
+    </main>
+    <script>
+        $('.genre_filter').click(function () {
+            genre_filter = $(this).attr('genre');
+            window.location.href = "/?genre_filter=" + genre_filter;
+        });
+    </script>
+{% end %}
