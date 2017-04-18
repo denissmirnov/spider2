@@ -2,11 +2,11 @@
     <thead>
     <tr>
         <th></th>
-        <th><a id="stamp_order" href="#"><img src="/static/images/10897-200.png" height="20"></a>Дата добавления</th>
         <th><a id="rating_order" href="#"><img src="/static/images/10897-200.png" height="20"></a>Рэйтинг</th>
         <th><a id="year_order" href="#"><img src="/static/images/10897-200.png" height="20"></a>Год фильма</th>
         <th>Название</th>
         <th>Жанр</th>
+        <th><a id="stamp_order" href="#"><img src="/static/images/10897-200.png" height="20"></a>Дата добавления</th>
     </tr>
     </thead>
     <tbody>
@@ -14,7 +14,6 @@
         {% if torrent['details'] %}
             <tr>
                 <td>{% if torrent['details']['image'] %}<img src="{{ torrent['details']['image'] }}" height="80">{% end %}</td>
-                <td>{{ torrent['stamp'].strftime('%d.%m.%Y') }}</td>
                 <td>{{ torrent['details']['rating'] }}</td>
                 <td>{{ torrent['details']['year'] }}</td>
                 <td><a href="/details/id/{{ torrent['id'] }}">{{ torrent['details']['name'] }}</a></td>
@@ -23,6 +22,7 @@
                     <a href="#" class="genre_filter" genre="{{ row }}">{{ row }}</a> |
                     {% end %}
                 </td>
+                <td>{{ torrent['stamp'].strftime('%d.%m.%Y') }}</td>
             </tr>
         {% end %}
     {% end %}
