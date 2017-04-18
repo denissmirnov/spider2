@@ -28,28 +28,27 @@ class System:
                 FROM 
                     torrents 
                 WHERE 
-                    url = %s
+                    torrent ->> 'name' = %s
                 """
-        self.cur.execute(sql, [torrent['url']])
+        self.cur.execute(sql, [torrent['name']])
         res = self.cur.fetchone()
 
         if not res:
             sql = """
                 INSERT INTO torrents 
                 (
-                    url, 
-                    text
+                    torrent
                 ) VALUES (
-                    %s, 
                     %s
                 ) RETURNING id;
             """
-            self.cur.execute(sql, [torrent['url'], torrent['text']])
-            return True
+            self.cur.execute(sql, [json.dumps({'url': torrent['url'], 'name': torrent['name']})])
+            res = self.cur.fetchone()
+            return res['id']
         else:
             return None
 
-    def add_details(self, url, details):
+    def add_details(self, torrent_id, details):
         j = json.loads(details)
         sql = """
                 UPDATE 
@@ -61,17 +60,17 @@ class System:
                     genre = %s,
                     torrent_name = %s
                 WHERE 
-                    url = %s
+                    id = %s
                 """
-        self.cur.execute(sql, [details, j['rating'], j['year'], json.dumps(j['genre']), j['name'], url])
+        self.cur.execute(sql, [details, j['rating'], j['year'], json.dumps(j['genre']), j['name'], torrent_id])
 
-    def add_torrent_url(self, url, torrent_url):
+    def add_torrent_url(self, torrent_id, torrent_url):
         sql = """
                 UPDATE 
                     torrents
                 SET
                     torrent_url = %s
                 WHERE 
-                    url = %s
+                    id = %s
                 """
-        self.cur.execute(sql, [json.dumps(torrent_url), url])
+        self.cur.execute(sql, [json.dumps(torrent_url), torrent_id])

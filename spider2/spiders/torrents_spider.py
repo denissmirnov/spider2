@@ -33,16 +33,16 @@ class TorrentsSpider(scrapy.Spider):
         for quote in response.xpath('//tr[@class="gai"]//td[@colspan="2"]//a[contains(@href, "/torrent/")]'):
             torrent = {
                 'url': self.base_url + quote.xpath('@href').extract()[0],
-                'text': quote.xpath('text()').extract()[0]
+                'name': quote.xpath('text()').extract()[0]
             }
-            res = self.system.add_torrent(torrent)
+            torrent_id = self.system.add_torrent(torrent)
 
-            if res:
+            if torrent_id:
                 next_page = torrent['url']
                 next_page = response.urljoin(next_page)
                 request = scrapy.Request(next_page, callback=self.parse_torrent)
-                request.meta['url'] = torrent['url']
-                request.meta['name'] = torrent['text']
+                request.meta['id'] = torrent_id
+                request.meta['name'] = torrent['name']
                 yield request
 
     def parse_torrent(self, response):
@@ -51,11 +51,11 @@ class TorrentsSpider(scrapy.Spider):
         torrent_url = [{'name': response.meta['name'], 'url': self.base_url + torrent.xpath('@href').extract_first()}]
         kinopoisk = details_node.xpath('//a[contains(@href, "kinopoisk")]')
         kinopoisk_url = kinopoisk.xpath('@href').extract_first()
-        self.system.add_torrent_url(response.meta['url'], torrent_url)
+        self.system.add_torrent_url(response.meta['id'], torrent_url)
 
         if kinopoisk_url:
             request = scrapy.Request(kinopoisk_url, callback=self.parse_kinopoisk)
-            request.meta['url'] = response.meta['url']
+            request.meta['id'] = response.meta['id']
             yield request
 
     def parse_kinopoisk(self, response):
@@ -73,4 +73,4 @@ class TorrentsSpider(scrapy.Spider):
             genre.append(q_genre.xpath('text()').extract()[0])
         details['genre'] = genre
 
-        self.system.add_details(response.meta['url'], json.dumps(details))
+        self.system.add_details(response.meta['id'], json.dumps(details))

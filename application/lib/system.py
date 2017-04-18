@@ -8,7 +8,7 @@ class System:
     async def get_torrents(self, limit, rating_order, year_order, stamp_order, genre_filter=None, search_filter=None):
         sql = """
             SELECT 
-                id, torrent_name, rating, year, genre, details, stamp, text, torrent_url
+                id, torrent_name, rating, year, genre, details, stamp, torrent, torrent_url
             FROM 
                 torrents
         """
@@ -21,7 +21,7 @@ class System:
                 sql += ' AND '
             else:
                 sql += ' WHERE '
-            sql += "\"text\" ILIKE '%%" + search_filter + "%%'"
+            sql += "torrent_name ILIKE '%%" + search_filter + "%%'"
 
         if rating_order or year_order or stamp_order:
             sql += "ORDER BY"

@@ -67,19 +67,17 @@ class Cleaner:
             sql = """
                 INSERT INTO torrents 
                 (
-                    url, 
-                    text,
                     stamp,
                     details,
                     rating,
                     year,
                     genre,
                     torrent_name,
-                    torrent_url
+                    torrent_url,
+                    torrent
                 ) VALUES (
-                    %s, 
+                    NOW(), 
                     %s,
-                    NOW(),
                     %s,
                     %s,
                     %s,
@@ -88,14 +86,13 @@ class Cleaner:
                     %s
                 );
             """
-            self.cur.execute(sql, [ins_torrent['url'],
-                                   ins_torrent['text'],
-                                   json.dumps(ins_torrent['details']),
+            self.cur.execute(sql, [json.dumps(ins_torrent['details']),
                                    ins_torrent['rating'],
                                    ins_torrent['year'],
                                    json.dumps(ins_torrent['genre']),
                                    ins_torrent['torrent_name'],
-                                   json.dumps(ins_torrent['torrent_url'])])
+                                   json.dumps(ins_torrent['torrent_url']),
+                                   json.dumps(ins_torrent['torrent'])])
 
 
 def main():
