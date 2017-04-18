@@ -34,11 +34,75 @@ class Cleaner:
         """
         self.cur.execute(sql)
 
+    def normalize(self):
+        sql = """
+            SELECT torrent_name
+            FROM torrents
+            GROUP BY torrent_name
+            HAVING count(*) > 1 AND torrent_name IS NOT NULL
+        """
+        self.cur.execute(sql)
+        res = self.cur.fetchall()
+        for row in res:
+            name = row['torrent_name']
+            sql = """
+                SELECT *
+                FROM torrents
+                WHERE torrent_name = %s
+            """
+            self.cur.execute(sql, [name])
+            torrents = self.cur.fetchall()
+            ins_torrent = {}
+            torrent_url = []
+            for torrent in torrents:
+                ins_torrent = torrent
+                torrent_url += ins_torrent['torrent_url']
+            ins_torrent['torrent_url'] = torrent_url
+            sql = """
+                DELETE from torrents
+                WHERE
+                  torrent_name = %s
+            """
+            self.cur.execute(sql, [name])
+            sql = """
+                INSERT INTO torrents 
+                (
+                    url, 
+                    text,
+                    stamp,
+                    details,
+                    rating,
+                    year,
+                    genre,
+                    torrent_name,
+                    torrent_url
+                ) VALUES (
+                    %s, 
+                    %s,
+                    NOW(),
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s
+                );
+            """
+            self.cur.execute(sql, [ins_torrent['url'],
+                                   ins_torrent['text'],
+                                   json.dumps(ins_torrent['details']),
+                                   ins_torrent['rating'],
+                                   ins_torrent['year'],
+                                   json.dumps(ins_torrent['genre']),
+                                   ins_torrent['torrent_name'],
+                                   json.dumps(ins_torrent['torrent_url'])])
+
 
 def main():
     cleaner = Cleaner()
     cleaner.setup()
     cleaner.clean()
+    cleaner.normalize()
 
 if __name__ == "__main__":
     try:

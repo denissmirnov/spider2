@@ -16,7 +16,9 @@
                 </tr>
             </table>
         </div><br><br>
-        <a class="btn btn-primary" href="{{ torrent['torrent_url'] }}" role="button">Скачать</a> {{ torrent['text'] }}
+        {% for row in torrent['torrent_url'] %}
+            <a class="btn btn-primary" href="{{ row['url'] }}" role="button">Скачать</a> {{ row['name'] }}<br><br>
+        {% end %}
     </main>
     <script>
         $('.genre_filter').click(function () {

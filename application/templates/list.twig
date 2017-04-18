@@ -7,7 +7,6 @@
         <th><a id="year_order" href="#"><img src="/static/images/10897-200.png" height="20"></a>Год фильма</th>
         <th>Название</th>
         <th>Жанр</th>
-        <th>Название торрента</th>
         <th></th>
     </tr>
     </thead>
@@ -25,8 +24,7 @@
                     <a href="#" class="genre_filter" genre="{{ row }}">{{ row }}</a> |
                     {% end %}
                 </td>
-                <td>{{ torrent['text'] }}</td>
-                <td><a class="btn btn-primary" href="{{ torrent['torrent_url'] }}" role="button">Скачать</a></td>
+                <td><a class="btn btn-primary" href="{{ torrent['torrent_url'][0]['url'] }}" role="button">Скачать</a></td>
             </tr>
         {% end %}
     {% end %}

@@ -42,12 +42,13 @@ class TorrentsSpider(scrapy.Spider):
                 next_page = response.urljoin(next_page)
                 request = scrapy.Request(next_page, callback=self.parse_torrent)
                 request.meta['url'] = torrent['url']
+                request.meta['name'] = torrent['text']
                 yield request
 
     def parse_torrent(self, response):
         details_node = response.xpath('//table[@id="details"]//tr//td[not(contains(@style,"vertical-align:top;"))]')
         torrent = details_node.xpath('//a[contains(@href, "download")]')
-        torrent_url = self.base_url + torrent.xpath('@href').extract_first()
+        torrent_url = [{'name': response.meta['name'], 'url': self.base_url + torrent.xpath('@href').extract_first()}]
         kinopoisk = details_node.xpath('//a[contains(@href, "kinopoisk")]')
         kinopoisk_url = kinopoisk.xpath('@href').extract_first()
         self.system.add_torrent_url(response.meta['url'], torrent_url)
@@ -71,6 +72,5 @@ class TorrentsSpider(scrapy.Spider):
         for q_genre in response.xpath('//a[contains(@href, "genre")]'):
             genre.append(q_genre.xpath('text()').extract()[0])
         details['genre'] = genre
-
 
         self.system.add_details(response.meta['url'], json.dumps(details))
