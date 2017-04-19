@@ -1,2 +1,3 @@
 cd ..
 scrapy crawl torrents
+python3 clean_db.py
