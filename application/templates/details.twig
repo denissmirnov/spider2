@@ -4,8 +4,13 @@
     <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
         <h2>{{ torrent['details']['name'] }}</h2>
         <h4>
+            {% set i = 0 %}
             {% for row in torrent['details']['genre'] %}
-                <a href="#" class="genre_filter" genre="{{ row }}">{{ row }}</a> |
+                {% set i += 1 %}
+                <a href="#" class="genre_filter" genre="{{ row }}">{{ row }}</a>
+                {% if len(torrent['details']['genre']) != i %}
+                    |
+                {% end %}
             {% end %}
         </h4>
         <div class="table-responsive">

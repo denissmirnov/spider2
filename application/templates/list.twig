@@ -18,8 +18,13 @@
                 <td>{{ torrent['details']['year'] }}</td>
                 <td><a href="/details/id/{{ torrent['id'] }}">{{ torrent['details']['name'] }}</a></td>
                 <td>
+                    {% set i = 0 %}
                     {% for row in torrent['details']['genre'] %}
-                    <a href="#" class="genre_filter" genre="{{ row }}">{{ row }}</a> |
+                        {% set i += 1 %}
+                        <a href="#" class="genre_filter" genre="{{ row }}">{{ row }}</a>
+                        {% if len(torrent['details']['genre']) != i %}
+                            |
+                        {% end %}
                     {% end %}
                 </td>
                 <td>{{ torrent['stamp'].strftime('%d.%m.%Y') }}</td>
