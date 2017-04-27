@@ -13,7 +13,7 @@ from application.handlers.main_handler import MainHandler
 
 
 class Application(tornado.web.Application):
-    def __init__(self, db_conf):
+    def __init__(self, db_conf, rows_per_page):
         handlers = [
             (r"/", MainHandler),
             (r"/ajax_list", AjaxListHandler),
@@ -42,3 +42,5 @@ class Application(tornado.web.Application):
         except Exception as e:
             logging.error('DB connection error ' + str(e))
             return
+
+        self.rows_per_page = rows_per_page

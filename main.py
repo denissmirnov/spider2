@@ -27,12 +27,13 @@ def main():
             'password': config['db'].get('password', 'postgres'),
             'database': config['db'].get('dbname', 'postgres')
         }
+        rows_per_page = config.get('rows_per_page', 20),
     except Exception as e:
         logging.error("LOGD: Failed to load configuration. %s" % str(e))
         return 1
 
     logging.info('Starting main server')
-    http_server = tornado.httpserver.HTTPServer(Application(db_conf))
+    http_server = tornado.httpserver.HTTPServer(Application(db_conf, rows_per_page[0]))
     http_server.listen(options.application_port)
 
     tornado.ioloop.IOLoop.current().start()
