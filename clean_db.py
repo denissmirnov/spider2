@@ -55,13 +55,8 @@ class Cleaner:
             ins_torrent = {}
             torrent_url = []
             for torrent in torrents:
-                f = False
-                for t in torrent_url:
-                    if t == torrent:
-                        f = True
-                if not f:
-                    ins_torrent = torrent
-                    torrent_url += ins_torrent['torrent_url']
+                ins_torrent = torrent
+                torrent_url += ins_torrent['torrent_url']
             ins_torrent['torrent_url'] = torrent_url
             sql = """
                 DELETE from torrents
