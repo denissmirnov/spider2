@@ -15,21 +15,16 @@ AsyncHTTPClient.configure(None, max_clients=10000)
 
 
 def main():
+    """ Main loop and initialization of torando """
     options.parse_command_line()
 
     config_file = options.config_file
     try:
         config = json.load(open(config_file))
-        db_conf = {
-            'host': config['db'].get('host', 'localhost'),
-            'port': config['db'].get('port', 5432),
-            'user': config['db'].get('username', 'postgres'),
-            'password': config['db'].get('password', 'postgres'),
-            'database': config['db'].get('dbname', 'postgres')
-        }
+        db_conf = config['db']
         rows_per_page = config.get('rows_per_page', 20),
-    except Exception as e:
-        logging.error("LOGD: Failed to load configuration. %s" % str(e))
+    except BaseException as exc:
+        logging.error("[x] Failed to load configuration. %s", str(exc))
         return 1
 
     logging.info('Starting main server')
