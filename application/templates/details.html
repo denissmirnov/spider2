@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block main %}
+    <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+        <h2>{{ torrent['details']['name'] }}</h2>
+        <h4>
+            {% set i = 0 %}
+            {% for row in torrent['details']['genre'] %}
+                {% set i += 1 %}
+                <a href="#" class="genre_filter" genre="{{ row }}">{{ row }}</a>
+                {% if len(torrent['details']['genre']) != i %}
+                    |
+                {% end %}
+            {% end %}
+        </h4>
+        <div class="table-responsive">
+            <table>
+                <tr>
+                    <td><img src="{{ torrent['details']['image'] }}" height="480"></td>
+                    <td valign="top" style="padding-left: 10px">{{ torrent['details']['synopsys'] }}</td>
+                </tr>
+            </table>
+        </div><br><br>
+        {% for row in torrent['torrent_url'] %}
+            <a class="btn btn-primary" href="{{ row['url'] }}" role="button">Скачать</a> {{ row['name'] }}<br><br>
+        {% end %}
+    </main>
+    <script>
+        $('.genre_filter').click(function () {
+            genre_filter = $(this).attr('genre');
+            window.location.href = "/?genre_filter=" + genre_filter;
+        });
+    </script>
+{% end %}

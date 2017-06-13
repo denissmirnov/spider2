@@ -1,0 +1,74 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th></th>
+        <th><a id="rating_order" href="#"><img src="/static/images/10897-200.png" height="20"></a>Рэйтинг</th>
+        <th><a id="year_order" href="#"><img src="/static/images/10897-200.png" height="20"></a>Год фильма</th>
+        <th>Название</th>
+        <th>Жанр</th>
+        <th><a id="stamp_order" href="#"><img src="/static/images/10897-200.png" height="20"></a>Дата добавления</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for torrent in torrents %}
+        {% if torrent['details'] %}
+            <tr>
+                <td>{% if torrent['details']['image'] %}<img src="{{ torrent['details']['image'] }}" height="80">{% end %}</td>
+                <td>{{ torrent['details']['rating'] }}</td>
+                <td>{{ torrent['details']['year'] }}</td>
+                <td><a href="/details/id/{{ torrent['id'] }}">{{ torrent['details']['name'] }}</a></td>
+                <td>
+                    {% set i = 0 %}
+                    {% for row in torrent['details']['genre'] %}
+                        {% set i += 1 %}
+                        <a href="#" class="genre_filter" genre="{{ row }}">{{ row }}</a>
+                        {% if len(torrent['details']['genre']) != i %}
+                            |
+                        {% end %}
+                    {% end %}
+                </td>
+                <td>{{ torrent['stamp'].strftime('%d.%m.%Y') }}</td>
+            </tr>
+        {% end %}
+    {% end %}
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        $('#rating_order').click(function () {
+            filter['rating_order'] = true;
+            filter['year_order'] = false;
+            filter['stamp_order'] = false;
+            $.post("/ajax_list", JSON.stringify(filter), function(data) {
+                $("#torrents_list").html(data);
+            });
+        });
+
+        $('#year_order').click(function () {
+            filter['rating_order'] = false;
+            filter['year_order'] = true;
+            filter['stamp_order'] = false;
+            $.post("/ajax_list", JSON.stringify(filter), function(data) {
+                $("#torrents_list").html(data);
+            });
+        });
+
+        $('#stamp_order').click(function () {
+            filter['rating_order'] = false;
+            filter['year_order'] = false;
+            filter['stamp_order'] = true;
+            $.post("/ajax_list", JSON.stringify(filter), function(data) {
+                $("#torrents_list").html(data);
+            });
+        });
+
+        $('.genre_filter').click(function () {
+            filter['genre_filter'] = $(this).attr('genre');
+            $.post("/ajax_list", JSON.stringify(filter), function(data) {
+                $("#torrents_list").html(data);
+            });
+        });
+    });
+</script>
+
