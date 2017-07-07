@@ -6,7 +6,6 @@ from psycopg2.extras import RealDictCursor
 
 
 class DB:
-    """ Base DB class """
     def __init__(self, config, db_logging=True):
         self.db = None
         self.dsn = "dbname={dbname} user={user} password={password} host={host} port={port}".format(**config)

@@ -2,7 +2,6 @@ from application.lib.db.db import DB
 
 
 class Torrents(DB):
-    """ Model class torrents for selecting rows from table torrents """
     async def get_torrents(self,
                            page_num,
                            rows_per_page,

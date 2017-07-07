@@ -15,7 +15,6 @@ AsyncHTTPClient.configure(None, max_clients=10000)
 
 
 def main():
-    """ Main loop and initialization of torando """
     options.parse_command_line()
 
     config_file = options.config_file

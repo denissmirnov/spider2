@@ -8,7 +8,6 @@ from application.lib.db.torrents import Torrents
 
 
 class Application(tornado.web.Application):
-    """ Application tornado class """
     def __init__(self, db_conf, rows_per_page):
         handlers = [
             (r"/", MainHandler),
