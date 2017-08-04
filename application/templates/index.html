@@ -7,17 +7,19 @@
         </div>
         {% if page_count > 0 %}
              <div>
-                 {% set min_p = page_num - 2 %}
-                 {% set max_p = page_num + 2 %}
-                 {% if min_p < 1 %} min_p = 1 {% end %}
-                 {% if max_p > page_count %} max_p = page_count {% end %}
+                 {% set min_p = page_num - 3 %}
+                 {% set max_p = page_num + 4 %}
+                 {% if min_p < 1 %}{% set min_p = 1 %}{% end %}
+                 {% if max_p > page_count %}{% set max_p = page_count %}{% end %}
+                 <a href="/?page_num=1" class="btn btn-outline-primary"><<</a>
                  {% for pn in range(min_p, max_p) %}
-                    {% if pn+1 == int(page_num) %}
-                         <a href="/?page_num={{ pn+1 }}" class="btn btn-primary">{{ pn+1 }}</a>
+                    {% if pn == page_num %}
+                         <a href="/?page_num={{ pn }}" class="btn btn-primary">{{ pn }}</a>
                     {% else %}
-                         <a href="/?page_num={{ pn+1 }}" class="btn btn-outline-primary">{{ pn+1 }}</a>
+                         <a href="/?page_num={{ pn }}" class="btn btn-outline-primary">{{ pn }}</a>
                     {% end %}
                  {% end %}
+                 <a href="/?page_num={{ page_count - 1 }}" class="btn btn-outline-primary">>></a>
              </div>
         {% end %}
         <script>

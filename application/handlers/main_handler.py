@@ -14,8 +14,8 @@ class MainHandler(tornado.web.RequestHandler):
         render_params = {
             'genre_filter': genre_filter,
             'search_filter': None,
-            'page_num': page_num,
-            'page_count': page_count,
+            'page_num': int(page_num),
+            'page_count': int(page_count),
         }
         self.render('index.html', **render_params)
 
@@ -29,7 +29,7 @@ class MainHandler(tornado.web.RequestHandler):
         render_params = {
             'genre_filter': genre_filter,
             'search_filter': search_filter,
-            'page_num': page_num,
-            'page_count': page_count,
+            'page_num': int(page_num),
+            'page_count': int(page_count),
         }
         self.render('index.html', **render_params)
